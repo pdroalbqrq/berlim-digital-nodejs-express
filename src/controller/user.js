@@ -19,16 +19,14 @@ exports.userAuth = async (req, res) => {
   const { email } = req.body;
   console.log(req.body);
   const password = Buffer.from(req.body.password, "base64").toString("ascii");
-  await User.findOne({ where: { email } })
-    .then(async user => {
-      if (!(await user))
-        return res.status(400).send({ error: "E-mail não existe" });
-      if (!(await bcrypt.compare(password, user.password)))
-        return res.status(400).send({ error: "Senha inválida" });
-      user.password = undefined;
-      res
-        .send({ user, token: generateToken({ id: user.id }) })
-    })
+  await User.findOne({ where: { email } }).then(async user => {
+    if (!(await user))
+      return res.status(400).send({ error: "E-mail não existe" });
+    if (!(await bcrypt.compare(password, user.password)))
+      return res.status(400).send({ error: "Senha inválida" });
+    user.password = undefined;
+    res.send({ user, token: generateToken({ id: user.id }) });
+  });
 };
 
 exports.adminAuth = async (req, res) => {
@@ -70,14 +68,14 @@ exports.user = (req, res) => {
 exports.postUser = (req, res) => {
   const { name, email, number } = req.body;
   const password = Buffer.from(req.body.password, "base64").toString("ascii");
-  const avatarId = req.params.id;
+  const imageId = req.params.imageId;
 
   User.create({
     name,
     email,
     number,
     password,
-    avatarId
+    imageId
   })
     .then(() => User.findOrCreate({ where: { email, number } }))
     .then(data => {
@@ -89,7 +87,7 @@ exports.postUser = (req, res) => {
 // Editar as informações de um usuário existente
 exports.alterUser = (req, res) => {
   const { name, email, number, role } = req.body;
-  const avatarId = req.params.imageId;
+  const imageId = req.params.imageId;
 
   User.update(
     {
@@ -97,7 +95,7 @@ exports.alterUser = (req, res) => {
       email,
       number,
       role,
-      avatarId
+      imageId
     },
     { where: { id: req.params.id } }
   ).then(result => {
