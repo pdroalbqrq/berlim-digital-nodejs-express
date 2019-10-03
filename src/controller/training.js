@@ -52,12 +52,31 @@ exports.training = (req, res) => {
       "description",
       "target",
       "level",
+      "price",
       "vacancies",
       "status"
     ]
   }).then(data => {
     if (data) {
       return res.send(data);
+    } else {
+      return res.status(404).send({ msg: "Página não existe" });
+    }
+  });
+};
+exports.item = (req, res) => {
+  Training.findByPk(req.params.id, {
+    include: [
+      {
+        model: Image,
+        as: "brand",
+        attributes: ["url", "lowQualityUrl", "type"]
+      }
+    ],
+    attributes: ["id", "title", "price", "status"]
+  }).then(data => {
+    if (data) {
+      return res.send({ product: data, quantity: 1 });
     } else {
       return res.status(404).send({ msg: "Página não existe" });
     }
@@ -101,6 +120,7 @@ exports.alterTraining = (req, res) => {
     level,
     vacancies,
     status,
+    price,
     url
   } = req.body;
 
@@ -115,6 +135,7 @@ exports.alterTraining = (req, res) => {
       level,
       vacancies,
       status,
+      price,
       url,
       bannerId,
       brandId,

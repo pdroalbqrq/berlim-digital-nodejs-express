@@ -30,6 +30,13 @@ const Training = db.sequelize.define(
         notNull: true
       }
     },
+    price: {
+      type: db.Sequelize.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: true
+      }
+    },
     target: {
       type: db.Sequelize.TEXT,
       allowNull: false,

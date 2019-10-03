@@ -79,7 +79,7 @@ exports.postUser = (req, res) => {
   })
     .then(() => User.findOrCreate({ where: { email, number } }))
     .then(data => {
-      res.send(data);
+      res.send({ data, token: generateToken({ id: data[0].id }) });
     })
     .catch(error => res.send(error));
 };
