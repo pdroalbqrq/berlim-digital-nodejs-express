@@ -24,6 +24,8 @@ app.use("/v1/token", require("./routes/v1/token"));
 app.use("/v1/image", require("./routes/v1/image"));
 app.use("/v1", require("./routes/v1/index"));
 
+
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => console.log(`Servidor inicializado na porta ${PORT}`));

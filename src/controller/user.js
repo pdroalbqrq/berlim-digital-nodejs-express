@@ -19,14 +19,19 @@ exports.userAuth = async (req, res) => {
   const { email } = req.body;
   console.log(req.body);
   const password = Buffer.from(req.body.password, "base64").toString("ascii");
-  await User.findOne({ where: { email } }).then(async user => {
-    if (!(await user))
-      return res.status(400).send({ error: "E-mail não existe" });
-    if (!(await bcrypt.compare(password, user.password)))
-      return res.status(400).send({ error: "Senha inválida" });
-    user.password = undefined;
-    res.send({ user, token: generateToken({ id: user.id }) });
-  });
+  await User.findOne({ where: { email } }).then(
+    async user => {
+      if (!(await user))
+        return res.status(400).send({ error: "E-mail não existe" });
+      if (!(await bcrypt.compare(password, user.password)))
+        return res.status(400).send({ error: "Senha inválida" });
+      user.password = undefined;
+      res.send({ user, token: generateToken({ id: user.id }) });
+    },
+    e => {
+      res.status(400).send({ error: "Ops! Ocorreu um erro, tente novamente mais tarde" });
+    }
+  );
 };
 
 exports.adminAuth = async (req, res) => {
