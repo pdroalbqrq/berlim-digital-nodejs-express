@@ -21,10 +21,9 @@ app.use("/v1/advisor", require("./routes/v1/advisor"));
 app.use("/v1/auth", require("./routes/v1/auth"));
 app.use("/v1/training", require("./routes/v1/training"));
 app.use("/v1/token", require("./routes/v1/token"));
+app.use("/v1/pagseguro", require("./routes/v1/pagseguro"));
 app.use("/v1/image", require("./routes/v1/image"));
 app.use("/v1", require("./routes/v1/index"));
-
-
 
 const PORT = process.env.PORT || 3000;
 

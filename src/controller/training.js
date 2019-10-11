@@ -1,8 +1,6 @@
 const Training = require("../models/Training");
 const Image = require("../models/Image");
 const Advisor = require("../models/Advisor");
-const axios = require("axios");
-const xml2js = require("xml2js");
 
 exports.trainings = (req, res) => {
   Training.findAll({
@@ -147,29 +145,4 @@ exports.alterTraining = (req, res) => {
   ).then(result => {
     res.send(result);
   });
-};
-
-exports.pagseguro = (req, res) => {
-  const { email, token } = req.body;
-
-  //email = pdroalbqrq@gmail.com
-  //token = 72543F4EAB734B59B09E5862573B755A
-
-  axios
-    .post(
-      `https://ws.sandbox.pagseguro.uol.com.br/v2/sessions?email=${email}&token=${token}`
-    )
-    .then(data => {
-      var parser = new xml2js.Parser();
-      response = data.data;
-      parser.parseString(response, function(err, result) {
-        console.dir(result);
-        res.status(200).send(result);
-        console.log("Done");
-      });
-    })
-    .catch(error => {
-      console.error(error);
-      res.status(400).send("error");
-    });
 };
