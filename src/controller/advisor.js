@@ -2,7 +2,7 @@ const Advisor = require("../models/Advisor");
 const Image = require("../models/Image");
 
 // Retornar todos os usuários
-exports.allAdvisors = (req, res) => {
+exports.allAdvisors = (req, res) => { 
   Advisor.findAll({
     include: [
       {
